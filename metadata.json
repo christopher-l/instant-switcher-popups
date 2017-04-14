@@ -1,1 +1,6 @@
-{"name": "Instant Popups", "description": "Remove delay of popups like the alt-tab switcher", "uuid": "instant-popups@christopher.luebbemeier.gmail.com", "shell-version": ["3.22.3"]}
+{
+  "name": "Instant Switcher Popups",
+  "description": "Remove the delay of popups like the Alt-Tab switcher.",
+  "uuid": "instant-switcher-popups@christopher.luebbemeier.gmail.com",
+  "shell-version": ["3.22.3"]
+}

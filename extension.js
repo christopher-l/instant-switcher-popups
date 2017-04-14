@@ -1,14 +1,19 @@
 // jshint esversion: 6
 // vim: sw=4 ts=4 sts=4
 
+// The code here is almost exclusively copy-paste from
+// ui/SwitcherPopup.js as extracted from libgnome-shell.so.
+//
+// The "show" method of SwitcherPopup is replaced with a slightly
+// modified version to show the popup instantly instead of after a delay
+// of 150ms.
+
 const SwitcherPopup = imports.ui.switcherPopup;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Main = imports.ui.main;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
-
-const POPUP_DELAY_TIMEOUT = 0; // milliseconds
 
 let old_show;
 
@@ -71,16 +76,11 @@ function enable() {
             return false;
         }
 
-        // We delay showing the popup so that fast Alt+Tab users aren't
-        // disturbed by the popup briefly flashing.
-        this._initialDelayTimeoutId = Mainloop.timeout_add(POPUP_DELAY_TIMEOUT,
-                                                           Lang.bind(this, function () {
-                                                               Main.osdWindowManager.hideAll();
-                                                               this.actor.opacity = 255;
-                                                               this._initialDelayTimeoutId = 0;
-                                                               return GLib.SOURCE_REMOVE;
-                                                           }));
-        GLib.Source.set_name_by_id(this._initialDelayTimeoutId, '[gnome-shell] Main.osdWindow.cancel');
+        // THE FOLLOWING PART WAS MODIFIED FOR THIS EXTENSION
+        // ------------------------------------------------------------
+        Main.osdWindowManager.hideAll();
+        this.actor.opacity = 255;
+        // ------------------------------------------------------------
         return true;
     };
 }
