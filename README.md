@@ -24,7 +24,7 @@ Relevant files can be extracted like this:
 
     gresource extract /usr/lib64/gnome-shell/libgnome-shell.so /org/gnome/shell/ui/switcherPopup.js > switcherPopup.js
 
-## Licence
+## License
 
 [GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 or above.
