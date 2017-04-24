@@ -4,10 +4,16 @@ This is a Gnome Shell extension to remove the delay of popups like the
 Alt-Tab switcher.
 It modifies a method of the `switcherPopup` class, which is shipped with
 the Gnome Shell, by copy/pasting most of its code.
-Thus, its support is limited to a specific version of the Gnome Shell for
-now (see [metadata.json](metadata.json)).
+Thus, its support is limited to a specific versions of the Gnome Shell
+for now (see [metadata.json](metadata.json)).
 
 ## Installation
+
+### From Gnome Extensions Website
+
+<https://extensions.gnome.org/extension/1199/instant-switcher-popups/>
+
+### From Github
 
     git clone https://github.com/christopher-l/instant-switcher-popups.git ~/.local/share/gnome-shell/extensions/instant-switcher-popups@christopher.luebbemeier.gmail.com
 
