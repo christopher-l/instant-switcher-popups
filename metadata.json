@@ -3,6 +3,7 @@
   "description": "Remove the delay of popups like the Alt-Tab switcher.",
   "uuid": "instant-switcher-popups@christopher.luebbemeier.gmail.com",
   "shell-version": [
+    "3.20.4",
     "3.22.3",
     "3.24"
   ],
