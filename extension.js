@@ -22,30 +22,30 @@ function alteredShow(backward, binding, mask) {
     if (this._items.length == 0)
         return false;
 
-    if (!Main.pushModal(this.actor)) {
+    if (!Main.pushModal(this)) {
         // Probably someone else has a pointer grab, try again with keyboard only
-        if (!Main.pushModal(this.actor, { options: Meta.ModalOptions.POINTER_ALREADY_GRABBED })) {
+        if (!Main.pushModal(this, { options: Meta.ModalOptions.POINTER_ALREADY_GRABBED }))
             return false;
-        }
     }
     this._haveModal = true;
     this._modifierMask = primaryModifier(mask);
 
-    this.actor.connect('key-press-event', Lang.bind(this, this._keyPressEvent));
-    this.actor.connect('key-release-event', Lang.bind(this, this._keyReleaseEvent));
+    this.connect('key-press-event', this._keyPressEvent.bind(this));
+    this.connect('key-release-event', this._keyReleaseEvent.bind(this));
 
-    this.actor.connect('button-press-event', Lang.bind(this, this._clickedOutside));
-    this.actor.connect('scroll-event', Lang.bind(this, this._scrollEvent));
+    this.connect('button-press-event', this._clickedOutside.bind(this));
+    this.connect('scroll-event', this._scrollEvent.bind(this));
 
-    this.actor.add_actor(this._switcherList.actor);
-    this._switcherList.connect('item-activated', Lang.bind(this, this._itemActivated));
-    this._switcherList.connect('item-entered', Lang.bind(this, this._itemEntered));
+    this.add_actor(this._switcherList);
+    this._switcherList.connect('item-activated', this._itemActivated.bind(this));
+    this._switcherList.connect('item-entered', this._itemEntered.bind(this));
+    this._switcherList.connect('item-removed', this._itemRemoved.bind(this));
 
     // Need to force an allocation so we can figure out whether we
     // need to scroll when selecting
-    this.actor.opacity = 0;
-    this.actor.show();
-    this.actor.get_allocation_box();
+    this.opacity = 0;
+    this.visible = true;
+    this.get_allocation_box();
 
     this._initialSelection(backward, binding);
 
@@ -54,16 +54,20 @@ function alteredShow(backward, binding, mask) {
     // https://bugzilla.gnome.org/show_bug.cgi?id=596695 for
     // details.) So we check now. (Have to do this after updating
     // selection.)
-    let [x, y, mods] = global.get_pointer();
-    if (!(mods & this._modifierMask)) {
-        this._finish(global.get_current_time());
-        return false;
+    if (this._modifierMask) {
+        let [x, y, mods] = global.get_pointer();
+        if (!(mods & this._modifierMask)) {
+            this._finish(global.get_current_time());
+            return false;
+        }
+    } else {
+        this._resetNoModsTimeout();
     }
 
     // THE FOLLOWING PART WAS MODIFIED FOR THIS EXTENSION
     // ------------------------------------------------------------
     Main.osdWindowManager.hideAll();
-    this.actor.opacity = 255;
+    this.opacity = 255;
     // ------------------------------------------------------------
     return true;
 }
